@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { ApiTestResult } from '@/types';
 
 export function ApiTest() {
   const { data: session, status } = useSession();
-  const [results, setResults] = useState<any>({});
+  const [results, setResults] = useState<Record<string, { success: boolean; data?: unknown; error?: string }>>({});
   const [loading, setLoading] = useState<string>('');
 
   const testHealth = async () => {
@@ -17,7 +18,7 @@ export function ApiTest() {
       const data = await response.json();
       setResults(prev => ({ ...prev, health: { success: response.ok, data } }));
     } catch (error) {
-      setResults(prev => ({ ...prev, health: { success: false, error: error.message } }));
+      setResults(prev => ({ ...prev, health: { success: false, error: error instanceof Error ? error.message : 'Unknown error' } }));
     }
     setLoading('');
   };
@@ -38,7 +39,7 @@ export function ApiTest() {
       const data = await response.json();
       setResults(prev => ({ ...prev, create: { success: response.ok, data } }));
     } catch (error) {
-      setResults(prev => ({ ...prev, create: { success: false, error: error.message } }));
+      setResults(prev => ({ ...prev, create: { success: false, error: error instanceof Error ? error.message : 'Unknown error' } }));
     }
     setLoading('');
   };
@@ -50,7 +51,7 @@ export function ApiTest() {
       const data = await response.json();
       setResults(prev => ({ ...prev, fetch: { success: response.ok, data } }));
     } catch (error) {
-      setResults(prev => ({ ...prev, fetch: { success: false, error: error.message } }));
+      setResults(prev => ({ ...prev, fetch: { success: false, error: error instanceof Error ? error.message : 'Unknown error' } }));
     }
     setLoading('');
   };
@@ -77,7 +78,7 @@ export function ApiTest() {
         </div>
 
         <div className="space-y-4">
-          {Object.entries(results).map(([key, result]: [string, any]) => (
+          {Object.entries(results).map(([key, result]) => (
             <div key={key} className="p-4 border rounded">
               <h3 className="font-semibold mb-2">{key.toUpperCase()} Test</h3>
               <div className={`p-2 rounded text-sm ${result.success ? 'bg-green-100' : 'bg-red-100'}`}>
@@ -95,10 +96,8 @@ export function ApiTest() {
           <h3 className="font-semibold mb-2">Session Info</h3>
           <pre className="text-sm overflow-auto">
             {JSON.stringify({ 
-              status, 
-              userId: session?.user?.id, 
-              email: session?.user?.email,
-              name: session?.user?.name 
+              status,
+              note: 'Authentication is optional in this app'
             }, null, 2)}
           </pre>
         </div>

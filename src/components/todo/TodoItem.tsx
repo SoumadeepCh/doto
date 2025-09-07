@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, KeyboardEvent } from 'react';
-import { Todo } from '@/types/todo';
+import { Task } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -11,18 +11,7 @@ import { cn } from '@/lib/utils';
 import { formatDisplayDate, isSameDate } from '@/lib/utils/dateUtils';
 
 interface TodoItemProps {
-  todo: {
-    _id: string;
-    title: string;
-    description?: string;
-    completed: boolean;
-    priority: 'low' | 'medium' | 'high';
-    category?: string;
-    dueDate?: string;
-    completedAt?: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  todo: Task;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string, text: string) => void;

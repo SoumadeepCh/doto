@@ -5,13 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Activity, BarChart3 } from 'lucide-react';
-
-interface ProductivityData {
-  date: string;
-  created: number;
-  completed: number;
-  completionRate: number;
-}
+import { ProductivityData } from '@/types';
 
 interface ProductivityChartProps {
   data: ProductivityData[];
@@ -39,7 +33,7 @@ export function ProductivityChart({ data, isLoading }: ProductivityChartProps) {
     );
   }
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; label?: string; payload?: Array<{ value: number }> }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-background border rounded-lg shadow-lg p-3">

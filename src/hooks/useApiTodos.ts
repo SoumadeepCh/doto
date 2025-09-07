@@ -2,19 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-
-interface Todo {
-  _id: string;
-  title: string;
-  description?: string;
-  completed: boolean;
-  priority: 'low' | 'medium' | 'high';
-  category?: string;
-  dueDate?: string;
-  completedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Task } from '@/types';
 
 export type TodoFilter = 'all' | 'active' | 'completed';
 
@@ -26,7 +14,7 @@ interface TodoStats {
 
 export function useApiTodos() {
   const { data: session, status } = useSession();
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Task[]>([]);
   const [filter, setFilter] = useState<TodoFilter>('all');
   const [isLoading, setIsLoading] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);

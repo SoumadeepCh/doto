@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/database/connection';
 import Task from '@/lib/models/Task';
-import Analytics from '@/lib/models/Analytics';
 import mongoose from 'mongoose';
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
+import type { Session } from 'next-auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -126,7 +126,7 @@ async function getCategoryBreakdown(userId: string, startDate: Date, endDate: Da
       $match: {
         userId: userObjectId,
         createdAt: { $gte: startDate, $lte: endDate },
-        category: { $exists: true, $ne: null, $ne: '' }
+        category: { $exists: true, $nin: [null, ''] }
       }
     },
     {
@@ -148,7 +148,7 @@ async function getCategoryBreakdown(userId: string, startDate: Date, endDate: Da
         }
       }
     },
-    { $sort: { count: -1 } }
+    { $sort: { count: -1 as const } }
   ];
 
   const categories = await Task.aggregate(pipeline);
@@ -159,6 +159,7 @@ async function getStreakCount(userId: string) {
   const userObjectId = new mongoose.Types.ObjectId(userId);
   let streak = 0;
   const today = startOfDay(new Date());
+  // eslint-disable-next-line prefer-const
   let currentDate = new Date(today);
 
   while (true) {

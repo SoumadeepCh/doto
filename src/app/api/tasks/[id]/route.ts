@@ -1,30 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/database/connection';
 import Task from '@/lib/models/Task';
 import mongoose from 'mongoose';
+import type { Session } from 'next-auth';
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { title, description, completed, priority, category, dueDate } = await request.json();
+    const { id } = await params;
 
     await connectToDatabase();
 
     const task = await Task.findOne({ 
-      _id: params.id, 
+      _id: id, 
       userId: new mongoose.Types.ObjectId(session.user.id) 
     });
 
@@ -54,16 +56,17 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     await connectToDatabase();
 
     const task = await Task.findOneAndDelete({ 
-      _id: params.id, 
+      _id: id, 
       userId: new mongoose.Types.ObjectId(session.user.id) 
     });
 

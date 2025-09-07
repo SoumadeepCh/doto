@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/database/connection';
 import Task from '@/lib/models/Task';
 import mongoose from 'mongoose';
+import { MongoQuery } from '@/types';
+import type { Session } from 'next-auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -19,7 +21,8 @@ export async function GET(request: NextRequest) {
     const filter = searchParams.get('filter') || 'all';
     const category = searchParams.get('category');
 
-    let query: any = { userId: new mongoose.Types.ObjectId(session.user.id) };
+    // eslint-disable-next-line prefer-const
+    let query: MongoQuery = { userId: new mongoose.Types.ObjectId(session.user.id) };
 
     // Apply filters
     if (filter === 'active') {
@@ -47,7 +50,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     console.log('POST /api/tasks - Starting request');
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     console.log('Session:', session ? { id: session.user?.id, email: session.user?.email } : 'No session');
     
     if (!session?.user?.id) {

@@ -239,9 +239,9 @@ export function AnalyticsDashboard() {
                     <div className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
                       <div className="text-orange-600">🔥</div>
                       <div>
-                        <p className="font-medium text-orange-800">You're on fire!</p>
+                        <p className="font-medium text-orange-800">You&apos;re on fire!</p>
                         <p className="text-sm text-orange-700">
-                          {analyticsData.overview.streak} days streak of completed tasks. Don't break the chain!
+                          {analyticsData.overview.streak} days streak of completed tasks. Don&apos;t break the chain!
                         </p>
                       </div>
                     </div>

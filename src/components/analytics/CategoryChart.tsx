@@ -5,13 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { PieChart as PieChartIcon, BarChart3, Tag } from 'lucide-react';
-
-interface CategoryData {
-  category: string;
-  count: number;
-  completed: number;
-  completionRate: number;
-}
+import { CategoryData } from '@/types';
 
 interface CategoryChartProps {
   data: CategoryData[];
@@ -52,7 +46,7 @@ export function CategoryChart({ data, isLoading }: CategoryChartProps) {
     );
   }
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ payload: CategoryData }> }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -75,7 +69,7 @@ export function CategoryChart({ data, isLoading }: CategoryChartProps) {
     return null;
   };
 
-  const CustomPieTooltip = ({ active, payload }: any) => {
+  const CustomPieTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ name: string; value: number; percent: number }> }) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       return (
@@ -146,7 +140,7 @@ export function CategoryChart({ data, isLoading }: CategoryChartProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 1).toFixed(0)}%`}
+                label={({ name, percent }) => `${name} ${((percent || 0) * 1).toFixed(0)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="count"

@@ -1,10 +1,15 @@
-import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcryptjs';
-import connectToDatabase from '@/lib/database/connection';
-import User from '@/lib/models/User';
+import NextAuth from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
+import { MongoClient } from 'mongodb'
+import bcrypt from 'bcryptjs'
+import connectToDatabase from '@/lib/database/connection'
+import User from '@/lib/models/User'
 
-export const authOptions: NextAuthOptions = {
+const clientPromise = new MongoClient(process.env.MONGODB_URI!).connect();
+
+export const authOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -14,52 +19,53 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          return null
         }
 
         try {
-          await connectToDatabase();
+          await connectToDatabase()
           
-          const user = await User.findOne({ email: credentials.email });
-          
+          const user = await User.findOne({ email: credentials.email })
           if (!user) {
-            return null;
+            return null
           }
 
-          const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
-          
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          )
+
           if (!isPasswordValid) {
-            return null;
+            return null
           }
 
           return {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
-            image: user.avatar,
-          };
+          }
         } catch (error) {
-          console.error('Authorization error:', error);
-          return null;
+          console.error('Auth error:', error)
+          return null
         }
       },
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id
       }
-      return token;
+      return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (token) {
-        session.user.id = token.id as string;
+        session.user.id = token.id
       }
-      return session;
+      return session
     },
   },
   pages: {
@@ -67,4 +73,4 @@ export const authOptions: NextAuthOptions = {
     signUp: '/auth/signup',
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+}
