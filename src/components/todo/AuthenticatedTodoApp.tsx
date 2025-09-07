@@ -73,7 +73,6 @@ export function AuthenticatedTodoApp() {
     }
   };
 
-  const categories = [...new Set(todos.map(t => t.category).filter(Boolean))];
 
   return (
     <div className="min-h-screen bg-background">

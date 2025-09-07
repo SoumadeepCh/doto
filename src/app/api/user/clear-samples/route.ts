@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/database/connection';
@@ -6,7 +6,7 @@ import Task from '@/lib/models/Task';
 import mongoose from 'mongoose';
 import type { Session } from 'next-auth';
 
-export async function DELETE(_request: NextRequest) {
+export async function DELETE() {
   try {
     const session = await getServerSession(authOptions) as Session | null;
     

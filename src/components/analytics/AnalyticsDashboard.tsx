@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ export function AnalyticsDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState(false);
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     if (!session?.user) return;
 
     setIsLoading(true);
@@ -76,7 +76,7 @@ export function AnalyticsDashboard() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [session?.user, selectedPeriod]);
 
   const initializeSampleData = async () => {
     if (!session?.user) return;
@@ -108,7 +108,7 @@ export function AnalyticsDashboard() {
 
   useEffect(() => {
     fetchAnalytics();
-  }, [session, selectedPeriod]);
+  }, [fetchAnalytics]);
 
   if (!session?.user) {
     return (

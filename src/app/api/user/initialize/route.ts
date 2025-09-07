@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import connectToDatabase from '@/lib/database/connection';
@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import { createSampleTodos } from '@/lib/utils/sampleData';
 import type { Session } from 'next-auth';
 
-export async function POST(_request: NextRequest) {
+export async function POST() {
   try {
     const session = await getServerSession(authOptions) as Session | null;
     

@@ -75,7 +75,7 @@ export function SignUpForm() {
         router.push('/');
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
