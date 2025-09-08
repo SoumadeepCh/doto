@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo List Web App
+
+This is a full-stack todo list web application built with Next.js, offering a modern and feature-rich user experience. It includes user authentication, todo management, and analytics to track your productivity.
+
+## Features
+
+*   **User Authentication:** Secure sign-up and sign-in functionality.
+*   **Todo Management:** Create, read, update, and delete your tasks.
+*   **Task Filtering:** Filter tasks by status (all, active, completed).
+*   **Productivity Analytics:** Visualize your task completion and productivity over time with charts.
+*   **Sample Data:** Option to initialize the app with sample data to quickly explore the features.
+*   **Responsive Design:** A clean and responsive UI that works on all devices.
+
+## Tech Stack
+
+*   **Framework:** [Next.js](https://nextjs.org/)
+*   **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+*   **Database:** [MongoDB](https://www.mongodb.com/)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **UI Components:** [Shadcn UI](https://ui.shadcn.com/)
+*   **Analytics:** [Chart.js](https://www.chartjs.org/)
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running, follow these simple steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   Node.js (v18.x or later)
+*   npm or yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  Clone the repo
+    ```sh
+    git clone https://github.com/your_username_/your_repository_.git
+    ```
+2.  Install NPM packages
+    ```sh
+    npm install
+    ```
+3.  Set up your environment variables. Create a `.env.local` file and add the following:
+    ```
+    # MongoDB Connection String
+    MONGODB_URI=your_mongodb_connection_string
 
-## Learn More
+    # NextAuth.js secret
+    NEXTAUTH_SECRET=your_nextauth_secret
+    NEXTAUTH_URL=http://localhost:3000
+    ```
+4.  Run the development server
+    ```sh
+    npm run dev
+    ```
+5.  Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-To learn more about Next.js, take a look at the following resources:
+## Live Demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can view a live demo of the application at [https://doto-lime.vercel.app](https://doto-lime.vercel.app).
